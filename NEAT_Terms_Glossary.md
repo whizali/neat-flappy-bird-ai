@@ -36,6 +36,20 @@
 - **Complexity**: Network structure `(input_nodes, output_nodes)`
 - **Genome**: Individual neural network with genes/connections
 
+## Genome Structure (Detailed)
+- **Nodes**: Individual neurons in the neural network
+  - **key**: Unique node identifier (negative = inputs, 0+ = hidden, positive = outputs)
+  - **bias**: Neuron's base activation offset
+  - **response**: Activation response multiplier
+  - **activation**: Activation function (tanh = hyperbolic tangent)
+  - **aggregation**: How inputs combine (sum = addition)
+
+- **Connections**: Synapses linking neurons
+  - **key**: Source→target node pair (e.g., (-4, 0) = input 4 → hidden 0)
+  - **innovation**: Unique mutation identifier (tracks evolutionary history)
+  - **weight**: Connection strength multiplier
+  - **enabled**: Whether connection is active (True/False)
+
 ## Termination
 - **Fitness threshold**: Minimum score required for success
 - **Winner**: Best-performing genome that meets criteria
