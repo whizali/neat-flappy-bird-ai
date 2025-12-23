@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEAT Flappy Bird AI - Presentation</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-secondary: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            background: var(--dark);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .content-block {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--text-secondary);
+        }
+
+        .content-block h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .metric {
+            background: var(--card);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--text-secondary);
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            margin: 1rem 0;
+            color: #e2e8f0;
+        }
+
+        .diagram-placeholder {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            margin: 1rem 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .list-items {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .list-items ul {
+            list-style: none;
+        }
+
+        .list-items li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .list-items li:before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--text-secondary);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide Counter -->
+    <div class="slide-counter">Slide <span id="current-slide">1</span> of <span id="total-slides">20</span></div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next</button>
+    </div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active" id="slide-1">
+        <div class="slide-content">
+            <h1 class="slide-title">NEAT Flappy Bird AI</h1>
+            <h2 class="slide-subtitle">Evolutionary Neural Networks</h2>
+            <p style="font-size: 1.125rem; margin-top: 2rem;">NeuroEvolution of Augmenting Topologies Implementation</p>
+            <p style="margin-top: 1rem; color: var(--text-secondary);">Ali Hassan | December 2024</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide" id="slide-2">
+        <div class="slide-content">
+            <h1 class="slide-title">Agenda</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Learning Objectives</h3>
+                    <ul class="list-items">
+                        <li>Understand NEAT algorithm fundamentals</li>
+                        <li>Explore evolutionary neural network training</li>
+                        <li>Analyze real-time AI learning visualization</li>
+                        <li>Examine performance metrics and results</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Presentation Flow</h3>
+                    <ol class="list-items">
+                        <li>Project Overview & Motivation</li>
+                        <li>NEAT Algorithm Fundamentals</li>
+                        <li>System Architecture & Design</li>
+                        <li>Implementation Details</li>
+                        <li>Training Results & Analysis</li>
+                        <li>Future Applications & Conclusion</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Project Overview -->
+    <div class="slide" id="slide-3">
+        <div class="slide-content">
+            <h1 class="slide-title">Project Overview</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>What is NEAT Flappy Bird AI?</h3>
+                    <ul class="list-items">
+                        <li>Complete NEAT algorithm implementation</li>
+                        <li>Trains neural networks to master Flappy Bird</li>
+                        <li>Evolutionary approach without supervised data</li>
+                        <li>Demonstrates AI learning through natural selection</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Key Achievements</h3>
+                    <ul class="list-items">
+                        <li><span class="highlight">2,697.82</span> peak fitness score</li>
+                        <li>Success in <span class="highlight">11 generations</span></li>
+                        <li><span class="highlight">95%+</span> pipe passage rate</li>
+                        <li>Real-time neural network visualization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Problem Statement -->
+    <div class="slide" id="slide-4">
+        <div class="slide-content">
+            <h1 class="slide-title">Problem Statement</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Traditional AI Challenges</h3>
+                    <p>Traditional approaches require extensive training data and manual strategy programming.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Flappy Bird Challenges</h3>
+                    <ul class="list-items">
+                        <li>Precise timing control for jumping</li>
+                        <li>Spatial awareness (bird vs pipes vs boundaries)</li>
+                        <li>Dynamic decision making in real-time</li>
+                        <li>Optimization under physical constraints</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Why NEAT?</h3>
+                <p>Evolves both network structure AND weights simultaneously. No pre-labeled training data required. Discovers optimal strategies through natural selection.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: NEAT Fundamentals -->
+    <div class="slide" id="slide-5">
+        <div class="slide-content">
+            <h1 class="slide-title">NEAT Algorithm Fundamentals</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>What is NEAT?</h3>
+                    <p><strong>NeuroEvolution of Augmenting Topologies</strong></p>
+                    <ul class="list-items">
+                        <li>Kenneth Stanley & Risto Miikkulainen (2002)</li>
+                        <li>Evolves neural network topology and weights</li>
+                        <li>Protects innovation through speciation</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Core Principles</h3>
+                    <ul class="list-items">
+                        <li><strong>Historical Marking:</strong> Tracks gene origins</li>
+                        <li><strong>Speciation:</strong> Protects structural innovation</li>
+                        <li><strong>Minimal Criteria:</strong> Starts simple, adds complexity when beneficial</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: NEAT Process -->
+    <div class="slide" id="slide-6">
+        <div class="slide-content">
+            <h1 class="slide-title">NEAT Evolutionary Process</h1>
+            <div class="content-block" style="margin-bottom: 2rem;">
+                <h3>8-Step Evolutionary Cycle</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; text-align: left; margin-top: 1rem;">
+                    <div><strong>1.</strong> Population Initialization → 20 random genomes</div>
+                    <div><strong>2.</strong> Neural Network Creation → Convert genomes to networks</div>
+                    <div><strong>3.</strong> Game Simulation → Each network controls one bird</div>
+                    <div><strong>4.</strong> Fitness Evaluation → Multi-component scoring</div>
+                    <div><strong>5.</strong> Species Formation → Group by compatibility</div>
+                    <div><strong>6.</strong> Selection & Reproduction → Top 25% survive</div>
+                    <div><strong>7.</strong> Mutation Operations → Weight, bias, structure changes</div>
+                    <div><strong>8.</strong> Termination Check → Fitness > 300 or max generations</div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Key Parameters</h3>
+                    <ul class="list-items">
+                        <li>Population: 20 genomes</li>
+                        <li>Fitness Threshold: 300</li>
+                        <li>Species Compatibility: 3.5</li>
+                        <li>Mutation Rates: Weight (60%), Bias (40%), Structure (5-20%)</li>
+                    </ul>
+                </div>
+                <div class="diagram-placeholder">
+                    <p>NEAT Evolution Cycle Diagram</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Neural Network Architecture -->
+    <div class="slide" id="slide-7">
+        <div class="slide-content">
+            <h1 class="slide-title">Neural Network Architecture</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Feedforward Network Structure</h3>
+                    <div style="font-family: monospace; background: #1a1a1a; padding: 1rem; border-radius: 0.25rem; margin: 1rem 0;">
+                        4 Input Neurons → Hidden Nodes → 1 Output Neuron<br>
+                        ├── Input 1: Bird Y Position (0-1)<br>
+                        ├── Input 2: Gap Distance (-1 to 1)<br>
+                        ├── Input 3: Velocity (-1 to 1)<br>
+                        ├── Input 4: Pipe Distance (0-1)<br>
+                        └── Output: Jump Decision (tanh activation)
+                    </div>
+                </div>
+                <div class="content-block">
+                    <h3>Mathematical Operations</h3>
+                    <div class="code-block">
+                        # Forward Pass Calculation
+                        z = Σ(wᵢ × xᵢ) + bias
+                        output = tanh(z)
+
+                        # Decision Threshold
+                        if output > 0.3:
+                            bird.jump()
+                        else:
+                            # Continue falling
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Evolution Dynamics</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Starts with direct 4→1 connections</li>
+                    <li>Can add hidden nodes and connections</li>
+                    <li>Winner: (1, 3) architecture - 1 hidden node, 3 connections</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: System Architecture -->
+    <div class="slide" id="slide-8">
+        <div class="slide-content">
+            <h1 class="slide-title">System Architecture</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Component Architecture</h3>
+                    <ul class="list-items">
+                        <li><strong>Population Manager:</strong> Handles 20 genomes per generation</li>
+                        <li><strong>Neural Networks:</strong> Feedforward networks created from genomes</li>
+                        <li><strong>Game Environment:</strong> Physics simulation with collision detection</li>
+                        <li><strong>Fitness Evaluator:</strong> Multi-component reward system</li>
+                        <li><strong>Species Handler:</strong> Automatic grouping based on compatibility</li>
+                    </ul>
+                </div>
+                <div class="diagram-placeholder">
+                    <p>Component Architecture Diagram</p>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Data Flow</h3>
+                <p style="font-family: monospace; background: #1a1a1a; padding: 1rem; border-radius: 0.25rem;">
+                    Genome → Neural Network → Game Actions → Fitness Score → Evolution
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Fitness Function -->
+    <div class="slide" id="slide-9">
+        <div class="slide-content">
+            <h1 class="slide-title">Fitness Function Design</h1>
+            <div class="content-block">
+                <h3>Multi-Component Reward System</h3>
+
+                <div class="content-grid">
+                    <div class="content-block">
+                        <h4>Continuous Rewards (per frame)</h4>
+                        <ul class="list-items">
+                            <li>Survival: +0.1 points</li>
+                            <li>Center Position: +0.05 points (if |bird.y - center| < 100)</li>
+                            <li>Progress: +0.02 points</li>
+                        </ul>
+                    </div>
+                    <div class="content-block">
+                        <h4>Event-Based Rewards</h4>
+                        <ul class="list-items">
+                            <li>Pipe Passage: +15 points (major achievement)</li>
+                        </ul>
+                        <h4>Penalties</h4>
+                        <ul class="list-items">
+                            <li>Pipe Collision: -5 points</li>
+                            <li>Boundary Hit: -10 points</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1rem;"><strong>Total Fitness:</strong> Sum of all rewards and penalties across entire game session</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Training Results Overview -->
+    <div class="slide" id="slide-10">
+        <div class="slide-content">
+            <h1 class="slide-title">Training Results Overview</h1>
+            <div class="metric-grid">
+                <div class="metric">
+                    <span class="metric-number">11</span>
+                    <span class="metric-label">Generations to Success</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">2,697</span>
+                    <span class="metric-label">Peak Fitness Score</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">57.8s</span>
+                    <span class="metric-label">Training Duration</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">95%+</span>
+                    <span class="metric-label">Pipe Passage Rate</span>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Performance Breakdown</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Early generations: Basic flight control</li>
+                    <li>Mid generations: Strategy refinement</li>
+                    <li>Final generation: Breakthrough discovery</li>
+                    <li>Steady improvement with explosive growth at end</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Generation Analysis -->
+    <div class="slide" id="slide-11">
+        <div class="slide-content">
+            <h1 class="slide-title">Generation-by-Generation Analysis</h1>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Generation</th>
+                            <th>Best Fitness</th>
+                            <th>Network Size</th>
+                            <th>Key Development</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>21.710</td>
+                            <td>(1, 4)</td>
+                            <td>Initial random population</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>29.110</td>
+                            <td>(1, 4)</td>
+                            <td>Basic flight patterns emerging</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>111.140</td>
+                            <td>(2, 4)</td>
+                            <td>Major fitness breakthrough</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td style="color: var(--accent); font-weight: bold;">2,697.820</td>
+                            <td>(1, 3)</td>
+                            <td><strong>Winner found!</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Winner Genome -->
+    <div class="slide" id="slide-12">
+        <div class="slide-content">
+            <h1 class="slide-title">Winner Genome Analysis</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Genome ID: 191</h3>
+                    <ul class="list-items">
+                        <li><strong>Architecture:</strong> (1, 3) - 1 hidden node, 3 connections</li>
+                        <li><strong>Fitness Score:</strong> 2,697.82</li>
+                        <li><strong>Generation:</strong> 10</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Connection Configuration</h3>
+                    <div style="font-family: monospace; font-size: 0.875rem;">
+                        Input 1 (Velocity) → Hidden: -0.061<br>
+                        Input 2 (Gap Distance) → Hidden: <span style="color: var(--accent); font-weight: bold;">1.929</span> ⭐ (Primary)<br>
+                        Input 3 (Pipe Distance) → Hidden: 0.436<br>
+                        Hidden → Output: Optimized weights
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Bias & Response Settings</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Output Node Bias: -0.169</li>
+                    <li>Response Multiplier: 0.986</li>
+                    <li>Activation: tanh function</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Visualization -->
+    <div class="slide" id="slide-13">
+        <div class="slide-content">
+            <h1 class="slide-title">Real-time Visualization</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Neural Network Input Lines</h3>
+                    <ul class="list-items">
+                        <li><strong style="color: #ff0000;">Red Line:</strong> Bird Y position (horizontal reference)</li>
+                        <li><strong style="color: #ffa500;">Orange Line:</strong> Distance to pipe gap center</li>
+                        <li><strong style="color: #ffff00;">Yellow Line:</strong> Velocity magnitude and direction</li>
+                        <li><strong style="color: #00ff00;">Green Line:</strong> Horizontal distance to pipe</li>
+                        <li><strong style="color: #0000ff;">Blue Lines:</strong> Pipe gap boundaries</li>
+                    </ul>
+                </div>
+                <div class="diagram-placeholder">
+                    <p>Neural Network Visualization Demo</p>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Educational Value</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Shows exactly what AI "sees"</li>
+                    <li>Demonstrates decision-making process</li>
+                    <li>Visual learning feedback</li>
+                    <li>Debugging and analysis tool</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Training Screenshots -->
+    <div class="slide" id="slide-14">
+        <div class="slide-content">
+            <h1 class="slide-title">Training Screenshots</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Generation 7 Analysis</h3>
+                    <ul class="list-items">
+                        <li><strong>Bird 1:</strong> Score 21 - Moderate performance</li>
+                        <li><strong>Bird 1:</strong> Score 254 - High performer emerging</li>
+                        <li><strong>Bird 3:</strong> Score 1 - Learning in progress</li>
+                    </ul>
+                </div>
+                <div class="diagram-placeholder">
+                    <p>Training Screenshots Gallery</p>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Visual Evidence</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Population diversity maintained</li>
+                    <li>Individual variation in strategies</li>
+                    <li>Evolutionary progress visible</li>
+                    <li>Real-time performance differences</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Performance Metrics -->
+    <div class="slide" id="slide-15">
+        <div class="slide-content">
+            <h1 class="slide-title">Performance Metrics</h1>
+            <div class="metric-grid">
+                <div class="metric">
+                    <span class="metric-number">100%</span>
+                    <span class="metric-label">Success Rate</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">11</span>
+                    <span class="metric-label">Generations (vs 15-20 expected)</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">2,697</span>
+                    <span class="metric-label">Peak Fitness (8.9x threshold)</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">33ms</span>
+                    <span class="metric-label">AI Reaction Time</span>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>AI Capabilities Demonstrated</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Consistent pipe passage performance</li>
+                    <li>Optimal flight pattern discovery</li>
+                    <li>Real-time decision making</li>
+                    <li>Strategy emergence without explicit programming</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Technical Implementation -->
+    <div class="slide" id="slide-16">
+        <div class="slide-content">
+            <h1 class="slide-title">Technical Implementation</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Technology Stack</h3>
+                    <ul class="list-items">
+                        <li><strong>Language:</strong> Python 3.10</li>
+                        <li><strong>Graphics:</strong> Pygame 2.6.1</li>
+                        <li><strong>NEAT Library:</strong> neat-python 0.92</li>
+                        <li><strong>Mathematics:</strong> NumPy 1.21+</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Code Architecture</h3>
+                    <ul class="list-items">
+                        <li><strong>flappy_bird.py:</strong> Main AI training (474 lines)</li>
+                        <li><strong>game.py:</strong> Human playable version</li>
+                        <li><strong>config-feedforward.txt:</strong> NEAT parameters</li>
+                        <li><strong>Modular Design:</strong> Clean separation of concerns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Challenges & Solutions -->
+    <div class="slide" id="slide-17">
+        <div class="slide-content">
+            <h1 class="slide-title">Challenges & Solutions</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Technical Challenges</h3>
+                    <ol class="list-items">
+                        <li><strong>Population Convergence:</strong> Solved with speciation</li>
+                        <li><strong>Fitness Landscape:</strong> Multi-component reward system</li>
+                        <li><strong>Network Complexity:</strong> Start simple, evolve complexity</li>
+                        <li><strong>Performance Balance:</strong> 30 FPS visualization vs training speed</li>
+                    </ol>
+                </div>
+                <div class="content-block">
+                    <h3>Algorithm Tuning</h3>
+                    <ul class="list-items">
+                        <li>Species compatibility threshold: 3.5</li>
+                        <li>Mutation rates optimized for stability</li>
+                        <li>Elitism ensures best solutions preserved</li>
+                        <li>Population size: 20 (balance diversity vs speed)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Future Applications -->
+    <div class="slide" id="slide-18">
+        <div class="slide-content">
+            <h1 class="slide-title">Applications & Future Work</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Current Applications</h3>
+                    <ul class="list-items">
+                        <li>Educational tool for AI learning</li>
+                        <li>Research platform for neuroevolution</li>
+                        <li>Game AI development framework</li>
+                        <li>Algorithm benchmarking</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Future Enhancements</h3>
+                    <ul class="list-items">
+                        <li>Multi-environment training</li>
+                        <li>Recurrent network integration</li>
+                        <li>Cooperative multi-agent systems</li>
+                        <li>Real-world robotics applications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Conclusion -->
+    <div class="slide" id="slide-19">
+        <div class="slide-content">
+            <h1 class="slide-title">Conclusion</h1>
+            <div class="content-block">
+                <h3>Project Achievements</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Complete NEAT algorithm implementation</li>
+                    <li>Successful AI training (2,697.82 fitness score)</li>
+                    <li>Real-time neural network visualization</li>
+                    <li>Comprehensive documentation and analysis</li>
+                    <li>Educational and research value demonstrated</li>
+                </ul>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Key Learnings</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li>Evolutionary algorithms excel at complex control problems</li>
+                    <li>Neural network evolution discovers non-obvious strategies</li>
+                    <li>Visualization enhances understanding of AI learning</li>
+                    <li>Modular design enables extension and modification</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Q&A -->
+    <div class="slide" id="slide-20">
+        <div class="slide-content">
+            <h1 class="slide-title">Q&A and References</h1>
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>Questions & Discussion</h3>
+                    <p>Open floor for questions about:</p>
+                    <ul class="list-items">
+                        <li>NEAT algorithm implementation</li>
+                        <li>Training methodology</li>
+                        <li>Performance optimization</li>
+                        <li>Future applications</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <h3>Key References</h3>
+                    <ol class="list-items">
+                        <li>Stanley, K. O., & Miikkulainen, R. (2002). Evolving neural networks through augmenting topologies</li>
+                        <li>NEAT-Python Documentation</li>
+                        <li>Pygame Documentation</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="content-block" style="margin-top: 2rem;">
+                <h3>Project Links</h3>
+                <ul class="list-items" style="text-align: center;">
+                    <li><strong>GitHub Repository:</strong> https://github.com/whizali/neat-flappy-bird-ai</li>
+                    <li><strong>Live Demo:</strong> https://whizali.github.io/neat-flappy-bird-ai</li>
+                    <li><strong>Documentation:</strong> Complete technical reports and analysis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 20;
+
+        function showSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Show current slide
+            document.getElementById(`slide-${slideNumber}`).classList.add('active');
+
+            // Update counter
+            document.getElementById('current-slide').textContent = slideNumber;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize first slide
+        showSlide(1);
+    </script>
+</body>
+</html>

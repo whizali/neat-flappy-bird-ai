@@ -3,43 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEAT Flappy Bird AI - Evolutionary Neural Networks</title>
-    <meta name="description" content="Watch AI learn to play Flappy Bird using NEAT (NeuroEvolution of Augmenting Topologies) algorithm with real-time neural network visualization">
-    <meta name="keywords" content="NEAT, AI, Neural Networks, Flappy Bird, Evolution, Machine Learning, Python">
-    
+    <title>NEAT Flappy Bird AI - NeuroEvolution of Augmenting Topologies</title>
+    <meta name="description" content="Complete NEAT implementation training AI agents to play Flappy Bird through evolutionary algorithms, featuring detailed genetic lifecycle analysis and feedforward neural network evolution">
+    <meta name="keywords" content="NEAT, NeuroEvolution, Flappy Bird AI, Evolutionary Algorithms, Feedforward Networks, Python, Machine Learning">
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="NEAT Flappy Bird AI - Evolutionary Neural Networks">
-    <meta property="og:description" content="Watch AI learn to play Flappy Bird using evolutionary algorithms with real-time visualization">
+    <meta property="og:description" content="Complete implementation of NEAT algorithm evolving neural networks to master Flappy Bird">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://whizali.github.io/neat-flappy-bird-ai/">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="imgs/bird1.png">
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Mermaid for diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     
     <style>
         :root {
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --accent-color: #f59e0b;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
             --dark-bg: #0f172a;
             --card-bg: #1e293b;
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --border-color: #334155;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --code-bg: #1a1a1a;
         }
 
         * {
@@ -53,161 +43,6 @@
             background: var(--dark-bg);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: var(--gradient-1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            line-height: 1.7;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.875rem 2rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .hero-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .demo-container {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Features Section */
-        .features {
-            padding: 6rem 0;
-            background: var(--dark-bg);
         }
 
         .container {
@@ -216,596 +51,694 @@
             padding: 0 2rem;
         }
 
-        .section-title {
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .hero-content {
             text-align: center;
-            font-size: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            background: var(--gradient-3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
         }
 
         .section-subtitle {
             text-align: center;
-            font-size: 1.125rem;
             color: var(--text-secondary);
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        /* Architecture Section */
-        .architecture {
-            padding: 6rem 0;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        }
-
-        .architecture-content {
+        /* System Architecture */
+        .architecture-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 3rem;
             align-items: center;
         }
 
-        .architecture-text h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+        .architecture-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--text-primary);
         }
 
         .architecture-text p {
             color: var(--text-secondary);
-            margin-bottom: 2rem;
-            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(37, 99, 235, 0.1);
+        .diagram-image {
+            width: 100%;
             border-radius: 0.5rem;
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            border: 1px solid var(--border-color);
         }
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            display: block;
+        /* Genetic Lifecycle */
+        .lifecycle {
+            background: var(--card-bg);
         }
 
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Code Section */
-        .code-section {
-            padding: 6rem 0;
-            background: var(--dark-bg);
-        }
-
-        .code-container {
+        .lifecycle-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
+            gap: 3rem;
         }
 
-        .code-block {
-            background: #1a1a1a;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            overflow-x: auto;
+        .lifecycle-step {
+            margin-bottom: 2rem;
         }
 
-        .code-block pre {
-            margin: 0;
-            color: #e2e8f0;
-        }
-
-        .keyword { color: #ff79c6; }
-        .string { color: #f1fa8c; }
-        .comment { color: #6272a4; }
-        .function { color: #50fa7b; }
-        .number { color: #bd93f9; }
-
-        /* Performance Section */
-        .performance {
-            padding: 6rem 0;
-            background: var(--gradient-2);
-        }
-
-        .performance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .performance-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 1rem;
+        .step-number {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            line-height: 2rem;
+            font-weight: 600;
+            margin-right: 1rem;
         }
 
-        .performance-card h3 {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
-        .performance-card p {
-            color: rgba(255, 255, 255, 0.8);
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
-        /* Documentation Section */
-        .documentation {
-            padding: 6rem 0;
+        /* Feedforward Network */
+        .network {
             background: var(--dark-bg);
         }
 
-        .doc-grid {
+        .network-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .network-explanation h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .network-explanation p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .math-equation {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .network-diagram {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .network-diagram h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .node-layer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .connection {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .connection::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transform: translateY(-50%);
+        }
+
+        /* Training Results */
+        .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
-        .doc-card {
+        .result-card {
             background: var(--card-bg);
             padding: 2rem;
-            border-radius: 1rem;
+            border-radius: 0.5rem;
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
         }
 
-        .doc-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-        }
-
-        .doc-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        .result-card h3 {
+            color: var(--text-primary);
             margin-bottom: 1rem;
-            font-size: 1.25rem;
         }
 
-        .doc-card p {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+        .result-image {
+            width: 100%;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Documentation */
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
         .doc-link {
-            color: var(--primary-color);
+            display: block;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
             text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .doc-link:hover {
-            color: var(--accent-color);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .doc-link h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-link p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         /* Footer */
         .footer {
             background: var(--card-bg);
-            padding: 3rem 0 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .footer-section a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer-bottom {
+            padding: 2rem 0;
             text-align: center;
-            padding-top: 2rem;
             border-top: 1px solid var(--border-color);
+        }
+
+        .footer p {
             color: var(--text-secondary);
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .architecture-content,
-            .code-container {
-                grid-template-columns: 1fr;
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .nav-links {
-                display: none;
-            }
-
-            .cta-buttons {
+                flex-wrap: wrap;
                 justify-content: center;
             }
-        }
 
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
+            .hero h1 {
+                font-size: 2rem;
+            }
 
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-        /* Mermaid diagram styling */
-        .mermaid {
-            background: transparent !important;
-        }
+            .architecture-grid,
+            .lifecycle-grid,
+            .network-content {
+                grid-template-columns: 1fr;
+            }
 
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
+            .node-layer {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+            .connection {
+                margin: 0.5rem 0;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">🧠 NEAT Flappy Bird AI</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#architecture">Architecture</a></li>
-                <li><a href="#performance">Performance</a></li>
-                <li><a href="#documentation">Docs</a></li>
-                <li><a href="https://github.com/whizali/neat-flappy-bird-ai" target="_blank">GitHub</a></li>
-            </ul>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">NEAT Flappy Bird AI</div>
+                <nav class="nav-links">
+                    <a href="#architecture">Architecture</a>
+                    <a href="#lifecycle">Genetic Lifecycle</a>
+                    <a href="#network">Feedforward Network</a>
+                    <a href="#results">Results</a>
+                    <a href="https://github.com/whizali/neat-flappy-bird-ai" target="_blank">GitHub</a>
+                </nav>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-container">
+        <div class="container">
             <div class="hero-content">
-                <h1>AI Learns Flappy Bird Through Evolution</h1>
-                <p>Watch neural networks evolve from random behavior to expert gameplay using the NEAT algorithm. Real-time visualization shows how AI makes decisions and learns optimal strategies through natural selection.</p>
-                <div class="cta-buttons">
-                    <a href="https://github.com/whizali/neat-flappy-bird-ai" class="btn btn-primary" target="_blank">
-                        <i class="fab fa-github"></i> View on GitHub
-                    </a>
-                    <a href="#demo" class="btn btn-secondary">
-                        <i class="fas fa-play"></i> Watch Demo
-                    </a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="demo-container floating">
-                    <img src="imgs/bird1.png" alt="Flappy Bird" style="width: 64px; height: 64px; margin-bottom: 1rem;">
-                    <h3 style="margin-bottom: 1rem; color: var(--accent-color);">Neural Network Input</h3>
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: var(--text-secondary);">
-                        <div>🔴 Bird Y Position: 0.43</div>
-                        <div>🟠 Gap Distance: -0.12</div>
-                        <div>🟡 Velocity: -0.42</div>
-                        <div>🟢 Pipe Distance: 0.45</div>
-                        <div style="margin-top: 1rem; color: var(--success-color);">
-                            <strong>Decision: JUMP! 🦘</strong>
-                        </div>
+                <h1>NEAT Flappy Bird AI</h1>
+                <p>Complete implementation of NeuroEvolution of Augmenting Topologies training neural networks to master Flappy Bird through evolutionary algorithms.</p>
+
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="metric-number">2,697</span>
+                        <span class="metric-label">Peak Fitness Score</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number">11</span>
+                        <span class="metric-label">Generations to Success</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number">20</span>
+                        <span class="metric-label">Population Size</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-number">4→1</span>
+                        <span class="metric-label">Network Architecture</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
+    <!-- System Architecture -->
+    <section class="section" id="architecture">
         <div class="container">
-            <h2 class="section-title fade-in">Key Features</h2>
-            <p class="section-subtitle fade-in">Advanced AI training with comprehensive visualization and documentation</p>
-            
-            <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🧬</div>
-                    <h3>NEAT Algorithm</h3>
-                    <p>NeuroEvolution of Augmenting Topologies - evolves both network weights and structure simultaneously for optimal performance.</p>
+            <h2 class="section-title">System Architecture</h2>
+            <p class="section-subtitle">High-level system design showing component interactions and data flow</p>
+
+            <div class="architecture-grid">
+                <div class="architecture-text">
+                    <h3>Component Architecture</h3>
+                    <p>The system consists of four main layers: input processing, NEAT engine, game simulation, and fitness evaluation. The NEAT engine manages population evolution while the game environment provides the fitness landscape.</p>
+
+                    <h3>Key Components</h3>
+                    <ul>
+                        <li><strong>Population Manager:</strong> Handles 20 genomes per generation</li>
+                        <li><strong>Neural Networks:</strong> Feedforward networks created from genomes</li>
+                        <li><strong>Game Environment:</strong> Physics simulation with collision detection</li>
+                        <li><strong>Fitness Evaluator:</strong> Multi-component reward system</li>
+                        <li><strong>Species Handler:</strong> Automatic grouping based on compatibility</li>
+                    </ul>
                 </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">👁️</div>
-                    <h3>Real-time Visualization</h3>
-                    <p>Watch neural network inputs with colored debug lines showing exactly what the AI "sees" and how it makes decisions.</p>
+
+                <div>
+                    <img src="diagrams/Component_Architecture_Diagram.png" alt="Component Architecture Diagram" class="diagram-image">
                 </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📊</div>
-                    <h3>Performance Analytics</h3>
-                    <p>Comprehensive fitness tracking, generation statistics, and learning progression analysis with detailed metrics.</p>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="architecture-text">
+                    <h3>Data Flow Architecture</h3>
+                    <p>Data flows from genome initialization through neural network creation, game simulation, fitness evaluation, and back to population evolution in a continuous cycle.</p>
+
+                    <h3>Data Processing Stages</h3>
+                    <ul>
+                        <li><strong>Input:</strong> Game state (bird position, pipe locations, velocity)</li>
+                        <li><strong>Processing:</strong> Neural network forward pass with tanh activation</li>
+                        <li><strong>Output:</strong> Jump decision (threshold-based)</li>
+                        <li><strong>Feedback:</strong> Fitness scores drive evolutionary selection</li>
+                    </ul>
                 </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Dual Game Modes</h3>
-                    <p>Both AI training mode and human-playable version for direct performance comparison and entertainment.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">⚙️</div>
-                    <h3>Configurable Parameters</h3>
-                    <p>Fully customizable NEAT parameters including population size, mutation rates, and network topology settings.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📚</div>
-                    <h3>Educational Documentation</h3>
-                    <p>Complete technical documentation, system architecture diagrams, and academic-quality project report.</p>
+
+                <div>
+                    <img src="diagrams/dataflow_diagram.png" alt="Data Flow Diagram" class="diagram-image">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Architecture Section -->
-    <section class="architecture" id="architecture">
+    <!-- Genetic Lifecycle -->
+    <section class="section lifecycle" id="lifecycle">
         <div class="container">
-            <div class="architecture-content">
-                <div class="architecture-text fade-in">
-                    <h2>System Architecture</h2>
-                    <p>The system implements a complete NEAT evolutionary algorithm with a sophisticated multi-component fitness function and real-time neural network visualization.</p>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-number">4</span>
-                            <span class="stat-label">Neural Inputs</span>
+            <h2 class="section-title">Genetic Lifecycle</h2>
+            <p class="section-subtitle">Complete NEAT evolutionary process from population initialization to successful convergence</p>
+
+            <div class="lifecycle-grid">
+                <div>
+                    <div class="lifecycle-step">
+                        <span class="step-number">1</span>
+                        <div class="step-title">Population Initialization</div>
+                        <div class="step-description">
+                            Start with 20 random genomes. Each genome contains connection genes with random weights and minimal structure. Initial networks have 4 inputs connected directly to 1 output neuron.
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-number">20</span>
-                            <span class="stat-label">Population Size</span>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">2</span>
+                        <div class="step-title">Neural Network Creation</div>
+                        <div class="step-description">
+                            Convert each genome into a functional feedforward neural network. Networks process normalized game inputs through tanh activation functions to produce jump decisions.
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-number">92%</span>
-                            <span class="stat-label">Success Rate</span>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">3</span>
+                        <div class="step-title">Game Simulation</div>
+                        <div class="step-description">
+                            Each neural network controls one bird in the game environment. Birds face physics (gravity, velocity) and obstacles (pipes) requiring precise timing for successful navigation.
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-number">15-20</span>
-                            <span class="stat-label">Avg Generations</span>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">4</span>
+                        <div class="step-title">Fitness Evaluation</div>
+                        <div class="step-description">
+                            Multi-component fitness calculation: +0.1 survival bonus, +0.05 centering reward, +0.02 progress incentive, +15 pipe passage achievement, penalties for collisions.
                         </div>
                     </div>
                 </div>
-                
-                <div class="architecture-diagram fade-in">
-                    <div class="mermaid">
-                        graph TB
-                            subgraph "NEAT Evolution Cycle"
-                                A[Population<br/>20 Genomes] --> B[Neural Networks<br/>4→1 Architecture]
-                                B --> C[Game Simulation<br/>Physics & Collision]
-                                C --> D[Fitness Evaluation<br/>Multi-component]
-                                D --> E[Species Formation<br/>Compatibility Groups]
-                                E --> F[Selection<br/>Top 25% Survive]
-                                F --> G[Crossover & Mutation<br/>Genetic Operations]
-                                G --> A
-                            end
-                            
-                            style A fill:#2563eb,stroke:#1e40af,color:#fff
-                            style B fill:#10b981,stroke:#059669,color:#fff
-                            style C fill:#f59e0b,stroke:#d97706,color:#fff
-                            style D fill:#ef4444,stroke:#dc2626,color:#fff
-                            style E fill:#8b5cf6,stroke:#7c3aed,color:#fff
-                            style F fill:#06b6d4,stroke:#0891b2,color:#fff
-                            style G fill:#f97316,stroke:#ea580c,color:#fff
+
+                <div>
+                    <div class="lifecycle-step">
+                        <span class="step-number">5</span>
+                        <div class="step-title">Species Formation</div>
+                        <div class="step-description">
+                            Group similar genomes using compatibility distance (threshold: 3.5). Species protect innovation and maintain genetic diversity through separate reproduction pools.
+                        </div>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">6</span>
+                        <div class="step-title">Selection & Reproduction</div>
+                        <div class="step-description">
+                            Select top 25% performers from each species. Apply elitism (preserve 2 best genomes). Create offspring through crossover and mutation to maintain population size.
+                        </div>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">7</span>
+                        <div class="step-title">Mutation Operations</div>
+                        <div class="step-description">
+                            Weight mutations (60%): Gaussian perturbation. Bias mutations (40%): Node threshold adjustment. Structural mutations (5-20%): Add/remove connections and nodes.
+                        </div>
+                    </div>
+
+                    <div class="lifecycle-step">
+                        <span class="step-number">8</span>
+                        <div class="step-title">Termination Check</div>
+                        <div class="step-description">
+                            Evaluate if best fitness exceeds threshold (300). If successful, return winning genome. Otherwise, continue evolution cycle with new generation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <img src="diagrams/gen_cycle.png" alt="Generation Cycle Diagram" style="max-width: 600px; width: 100%; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedforward Network -->
+    <section class="section network" id="network">
+        <div class="container">
+            <h2 class="section-title">Feedforward Neural Network</h2>
+            <p class="section-subtitle">Detailed explanation of the 4-input neural network architecture and decision-making process</p>
+
+            <div class="network-content">
+                <div class="network-explanation">
+                    <h3>Network Architecture</h3>
+                    <p>The neural network uses a simple but effective 4-input to 1-output feedforward architecture. This minimal structure allows for fast evolution while providing sufficient complexity for the task.</p>
+
+                    <h3>Input Processing</h3>
+                    <p>Four normalized game state variables feed into the network:</p>
+                    <ul>
+                        <li><strong>Bird Y Position:</strong> bird.y / WINDOW_HEIGHT (range: 0-1)</li>
+                        <li><strong>Gap Distance:</strong> (bird.y - pipe_center) / (WINDOW_HEIGHT/2) (range: -1 to 1)</li>
+                        <li><strong>Velocity:</strong> bird.velocity / 20.0 (range: approximately -1 to 1)</li>
+                        <li><strong>Pipe Distance:</strong> (pipe.x - bird.x) / WINDOW_WIDTH (range: 0-1)</li>
+                    </ul>
+
+                    <h3>Mathematical Operations</h3>
+                    <div class="math-equation">
+                        # Forward Pass Calculation<br>
+                        z = Σ(wᵢ × xᵢ) + bias<br>
+                        output = tanh(z)<br>
+                        <br>
+                        # Decision Threshold<br>
+                        if output > 0.3:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;bird.jump()<br>
+                        else:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;# Continue falling
+                    </div>
+
+                    <h3>Activation Function</h3>
+                    <p>The hyperbolic tangent (tanh) function provides bounded output (-1 to 1) and smooth gradients for stable learning. The 0.3 threshold creates a bias toward jumping when confidence is moderate to high.</p>
+                </div>
+
+                <div class="network-diagram">
+                    <h4>Network Structure</h4>
+
+                    <div class="node-layer">
+                        <div class="node">X₁</div>
+                        <div class="node">X₂</div>
+                        <div class="node">X₃</div>
+                        <div class="node">X₄</div>
+                    </div>
+
+                    <div class="connection">
+                        <div style="height: 40px;"></div>
+                    </div>
+
+                    <div class="node-layer">
+                        <div class="node" style="background: var(--accent-color);">Y</div>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: left;">
+                        <div style="margin-bottom: 0.5rem;"><strong>X₁:</strong> Bird Y Position</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>X₂:</strong> Gap Distance</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>X₃:</strong> Velocity</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>X₄:</strong> Pipe Distance</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Y:</strong> Jump Decision (tanh activation)</div>
+                        <div style="margin-top: 1rem; color: var(--accent-color);"><strong>Threshold:</strong> Jump if Y > 0.3</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Code Section -->
-    <section class="code-section">
+    <!-- Training Results -->
+    <section class="section" id="results">
         <div class="container">
-            <h2 class="section-title fade-in">Neural Network Implementation</h2>
-            <div class="code-container">
-                <div class="fade-in">
-                    <h3 style="margin-bottom: 1rem;">Input Processing</h3>
-                    <div class="code-block">
-                        <pre><code><span class="comment"># Neural Network Inputs (Normalized)</span>
-<span class="keyword">def</span> <span class="function">get_inputs</span>(bird, pipes):
-    <span class="comment"># Bird Y position (0-1 range)</span>
-    bird_y_norm = bird.y / <span class="number">WINDOW_HEIGHT</span>
-    
-    <span class="comment"># Distance to pipe gap center</span>
-    pipe_center = pipes[<span class="number">0</span>].height + pipes[<span class="number">0</span>].GAP / <span class="number">2</span>
-    distance_to_center = (bird.y - pipe_center) / <span class="number">400</span>
-    
-    <span class="comment"># Velocity (normalized)</span>
-    velocity_norm = bird.velocity / <span class="number">20.0</span>
-    
-    <span class="comment"># Horizontal distance to pipe</span>
-    horizontal_distance = (pipes[<span class="number">0</span>].x - bird.x) / <span class="number">600</span>
-    
-    <span class="keyword">return</span> [bird_y_norm, distance_to_center, 
-            velocity_norm, horizontal_distance]</code></pre>
-                    </div>
+            <h2 class="section-title">Training Results</h2>
+            <p class="section-subtitle">Visual evidence of evolutionary progress and successful AI development</p>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Generation 7 - Mixed Performance</h3>
+                    <img src="diagrams/gen-7_birds-1_score-21.png" alt="Generation 7 Bird 1 Score 21" class="result-image">
+                    <p>Early generation showing varied performance levels. Some birds achieve moderate scores while others struggle with basic navigation.</p>
                 </div>
-                
-                <div class="fade-in">
-                    <h3 style="margin-bottom: 1rem;">Decision Making</h3>
-                    <div class="code-block">
-                        <pre><code><span class="comment"># AI Decision Process</span>
-<span class="keyword">for</span> x, bird <span class="keyword">in</span> <span class="function">enumerate</span>(birds):
-    <span class="comment"># Get normalized inputs</span>
-    inputs = get_inputs(bird, pipes)
-    
-    <span class="comment"># Neural network forward pass</span>
-    output = nets[x].<span class="function">activate</span>(inputs)
-    
-    <span class="comment"># Decision threshold</span>
-    <span class="keyword">if</span> output[<span class="number">0</span>] > <span class="number">0.3</span>:
-        bird.<span class="function">jump</span>()  <span class="comment"># Execute jump</span>
-    <span class="keyword">else</span>:
-        <span class="comment"># Let gravity take effect</span>
-        <span class="keyword">pass</span>
-        
-    <span class="comment"># Update fitness continuously</span>
-    ge[x].fitness += <span class="number">0.1</span>  <span class="comment"># Survival bonus</span></code></pre>
+
+                <div class="result-card">
+                    <h3>Generation 7 - High Performer</h3>
+                    <img src="diagrams/gen-7_birds-1_score-254.png" alt="Generation 7 Bird 1 Score 254" class="result-image">
+                    <p>Exceptional individual achieving 254 points, demonstrating emergence of effective navigation strategies within the population.</p>
+                </div>
+
+                <div class="result-card">
+                    <h3>Generation 7 - Learning in Progress</h3>
+                    <img src="diagrams/gen-7_birds-3_score-1.png" alt="Generation 7 Bird 3 Score 1" class="result-image">
+                    <p>Lower-performing individual showing ongoing learning process. Population diversity ensures evolutionary progress continues.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3>Final Success Metrics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div style="background: var(--card-bg); padding: 2rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-color); margin-bottom: 0.5rem;">2,697.82</div>
+                        <div style="color: var(--text-secondary);">Peak Fitness Score</div>
+                    </div>
+                    <div style="background: var(--card-bg); padding: 2rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-color); margin-bottom: 0.5rem;">11</div>
+                        <div style="color: var(--text-secondary);">Generations to Success</div>
+                    </div>
+                    <div style="background: var(--card-bg); padding: 2rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-color); margin-bottom: 0.5rem;">300+</div>
+                        <div style="color: var(--text-secondary);">Fitness Threshold</div>
+                    </div>
+                    <div style="background: var(--card-bg); padding: 2rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-color); margin-bottom: 0.5rem;">95%+</div>
+                        <div style="color: var(--text-secondary);">Pipe Passage Rate</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Performance Section -->
-    <section class="performance" id="performance">
+    <!-- Documentation -->
+    <section class="section">
         <div class="container">
-            <h2 class="section-title fade-in" style="color: white;">Performance Metrics</h2>
-            <p class="section-subtitle fade-in" style="color: rgba(255,255,255,0.8);">Quantitative results from AI training and evaluation</p>
-            
-            <div class="performance-grid">
-                <div class="performance-card fade-in">
-                    <h3>300+</h3>
-                    <p>Best Fitness Score Achieved</p>
-                </div>
-                
-                <div class="performance-card fade-in">
-                    <h3>95%+</h3>
-                    <p>Pipe Passage Success Rate</p>
-                </div>
-                
-                <div class="performance-card fade-in">
-                    <h3>33ms</h3>
-                    <p>AI Reaction Time (30 FPS)</p>
-                </div>
-                
-                <div class="performance-card fade-in">
-                    <h3>60s+</h3>
-                    <p>Average Survival Time</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <h2 class="section-title">Documentation</h2>
+            <p class="section-subtitle">Complete technical documentation and analysis</p>
 
-    <!-- Documentation Section -->
-    <section class="documentation" id="documentation">
-        <div class="container">
-            <h2 class="section-title fade-in">Documentation & Resources</h2>
-            <p class="section-subtitle fade-in">Comprehensive guides and technical documentation</p>
-            
-            <div class="doc-grid">
-                <div class="doc-card fade-in">
-                    <h3><i class="fas fa-rocket"></i> Quick Start Guide</h3>
-                    <p>Get up and running with the AI training system in minutes. Includes installation, setup, and first training run.</p>
-                    <a href="README.md" class="doc-link">Read Guide <i class="fas fa-arrow-right"></i></a>
-                </div>
-                
-                <div class="doc-card fade-in">
-                    <h3><i class="fas fa-file-alt"></i> Project Report</h3>
+            <div class="docs-grid">
+                <a href="PROJECT_REPORT.md" class="doc-link">
+                    <h3>Project Report</h3>
                     <p>Complete academic-style project report with methodology, implementation details, and evaluation results.</p>
-                    <a href="PROJECT_REPORT.md" class="doc-link">View Report <i class="fas fa-arrow-right"></i></a>
-                </div>
-                
-                <div class="doc-card fade-in">
-                    <h3><i class="fas fa-sitemap"></i> System Architecture</h3>
-                    <p>Detailed system design documentation with architecture diagrams and component relationships.</p>
-                    <a href="SYSTEM_DESIGN.md" class="doc-link">Explore Architecture <i class="fas fa-arrow-right"></i></a>
-                </div>
-                
-                <div class="doc-card fade-in">
-                    <h3><i class="fas fa-code"></i> API Documentation</h3>
-                    <p>Technical documentation covering neural network implementation, NEAT algorithm, and fitness functions.</p>
-                    <a href="DOCUMENTATION.md" class="doc-link">View API Docs <i class="fas fa-arrow-right"></i></a>
-                </div>
-                
-                <div class="doc-card fade-in">
-                    <h3><i class="fas fa-chart-line"></i> Data Flow Diagrams</h3>
-                    <p>Visual representation of data flow through the system from initialization to evolution completion.</p>
-                    <a href="DATA_FLOW_DIAGRAM.md" class="doc-link">See Diagrams <i class="fas fa-arrow-right"></i></a>
-                </div>
-                
-                <div class="doc-card fade-in">
-                    <h3><i class="fab fa-github"></i> Source Code</h3>
-                    <p>Complete source code with detailed comments, modular structure, and comprehensive examples.</p>
-                    <a href="https://github.com/whizali/neat-flappy-bird-ai" class="doc-link" target="_blank">Browse Code <i class="fas fa-external-link-alt"></i></a>
-                </div>
+                </a>
+
+                <a href="SYSTEM_DESIGN.md" class="doc-link">
+                    <h3>System Design</h3>
+                    <p>Technical architecture documentation with component relationships and system design principles.</p>
+                </a>
+
+                <a href="ARCHITECTURE.md" class="doc-link">
+                    <h3>Architecture Diagrams</h3>
+                    <p>Visual system architecture with Mermaid diagrams and detailed component explanations.</p>
+                </a>
+
+                <a href="DOCUMENTATION.md" class="doc-link">
+                    <h3>Technical Documentation</h3>
+                    <p>API documentation and technical implementation details for developers and researchers.</p>
+                </a>
+
+                <a href="GENERATION_ANALYSIS.md" class="doc-link">
+                    <h3>Generation Analysis</h3>
+                    <p>Detailed analysis of training runs with generation-by-generation statistics and performance metrics.</p>
+                </a>
+
+                <a href="https://github.com/whizali/neat-flappy-bird-ai" target="_blank" class="doc-link">
+                    <h3>Source Code</h3>
+                    <p>Complete source code repository with implementation, configuration files, and setup instructions.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -813,144 +746,22 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>NEAT Flappy Bird AI</h3>
-                    <p>An educational implementation of evolutionary neural networks demonstrating AI learning through natural selection.</p>
-                    <p>Built with Python, Pygame, and NEAT-Python library.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="https://github.com/whizali/neat-flappy-bird-ai" target="_blank">GitHub Repository</a>
-                    <a href="README.md">Installation Guide</a>
-                    <a href="PROJECT_REPORT.md">Project Report</a>
-                    <a href="DOCUMENTATION.md">Technical Docs</a>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Technologies</h3>
-                    <a href="https://neat-python.readthedocs.io/" target="_blank">NEAT-Python</a>
-                    <a href="https://www.pygame.org/" target="_blank">Pygame</a>
-                    <a href="https://www.python.org/" target="_blank">Python 3.10+</a>
-                    <a href="https://numpy.org/" target="_blank">NumPy</a>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="https://github.com/whizali" target="_blank">
-                        <i class="fab fa-github"></i> GitHub Profile
-                    </a>
-                    <a href="mailto:contact@example.com">
-                        <i class="fas fa-envelope"></i> Email Contact
-                    </a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Ali Hassan. Licensed under MIT License. Built for educational purposes.</p>
-            </div>
+            <p>NEAT Flappy Bird AI - Complete implementation of evolutionary neural networks. Built with Python, Pygame, and NEAT-Python.</p>
         </div>
     </footer>
 
     <script>
-        // Initialize Mermaid
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                primaryColor: '#2563eb',
-                primaryTextColor: '#f8fafc',
-                primaryBorderColor: '#1e40af',
-                lineColor: '#64748b',
-                secondaryColor: '#1e293b',
-                tertiaryColor: '#334155'
-            }
-        });
-
-        // Smooth scrolling for navigation links
+        // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                        behavior: 'smooth'
                     });
                 }
             });
-        });
-
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Add some interactive features
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animate stats on scroll
-            const stats = document.querySelectorAll('.stat-number');
-            const animateStats = () => {
-                stats.forEach(stat => {
-                    const target = stat.textContent;
-                    if (target.includes('%')) {
-                        const num = parseInt(target);
-                        animateNumber(stat, 0, num, '%');
-                    } else if (target.includes('-')) {
-                        const nums = target.split('-');
-                        stat.textContent = `${nums[0]}-${nums[1]}`;
-                    } else {
-                        const num = parseInt(target) || 0;
-                        if (num > 0) {
-                            animateNumber(stat, 0, num);
-                        }
-                    }
-                });
-            };
-
-            const animateNumber = (element, start, end, suffix = '') => {
-                const duration = 2000;
-                const increment = (end - start) / (duration / 16);
-                let current = start;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= end) {
-                        current = end;
-                        clearInterval(timer);
-                    }
-                    element.textContent = Math.floor(current) + suffix;
-                }, 16);
-            };
-
-            // Trigger animation when stats section is visible
-            const statsSection = document.querySelector('.stats-grid');
-            if (statsSection) {
-                const statsObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            animateStats();
-                            statsObserver.unobserve(entry.target);
-                        }
-                    });
-                });
-                statsObserver.observe(statsSection);
-            }
         });
     </script>
 </body>
