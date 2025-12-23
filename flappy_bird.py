@@ -319,7 +319,7 @@ def main(genomes, config):
     
     # Initialize display
     win = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption("NEAT Flappy Bird AI - Watch the Birds Learn!")
+    pygame.display.set_caption("NEAT Flappy Bird AI!")
     clock = pygame.time.Clock()
     score = 0
 
