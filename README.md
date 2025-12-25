@@ -4,11 +4,11 @@ A comprehensive implementation of NEAT (NeuroEvolution of Augmenting Topologies)
 
 ## Features
 
-- **🧠 Optimized Neural Network**: 4 normalized inputs with feedforward architecture
-- **🎯 Advanced Fitness Function**: Multi-layered reward system for survival, positioning, and pipe passing
-- **👁️ Visual Learning**: Real-time AI training with debug visualization showing neural network inputs
-- **🎮 Dual Game Modes**: AI training version and polished human-playable version
-- **⚙️ Robust Implementation**: Comprehensive error handling, resource management, and optimized NEAT parameters
+- **Optimized Neural Network**: 4 normalized inputs with feedforward architecture
+- **Advanced Fitness Function**: Multi-layered reward system for survival, positioning, and pipe passing
+- **Visual Learning**: Real-time AI training with debug visualization showing neural network inputs
+- **Dual Game Modes**: AI training version and polished human-playable version
+- **Robust Implementation**: Comprehensive error handling, resource management, and optimized NEAT parameters
 
 ## Quick Start
 
